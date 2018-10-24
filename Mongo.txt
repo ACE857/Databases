@@ -13,9 +13,10 @@
         
         
         // retrive document
-         MongoCursor<Document> iterator = collection.find().iterator();
-        while(iterator.hasNext()){
-            jTextArea1.append("\n"+iterator.next().get("roll"));
+        FindIterable<org.bson.Document> iter = collection.find();
+        Iterator it = iter.iterator();
+        while(it.hasNext()){
+            System.out.println(it.next());
         }
         
         // create and delete from a collection a collection
