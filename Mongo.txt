@@ -1,0 +1,34 @@
+ MongoClient mongo = new MongoClient("localhost",27017);
+        MongoCredential credential = MongoCredential.createCredential("", "mock", "".toCharArray());
+        System.out.println("connected to database");
+        
+        MongoDatabase database = mongo.getDatabase("mock");
+        System.out.println(credential);
+        
+        MongoCollection<org.bson.Document> collection = database.getCollection("student");
+        org.bson.Document document = new org.bson.Document("name","suraj singh bisht")
+                                       .append("class","TE")
+                                       .append("pass","dope");
+        collection.insertOne(document);
+        
+        
+        // retrive document
+         MongoCursor<Document> iterator = collection.find().iterator();
+        while(iterator.hasNext()){
+            jTextArea1.append("\n"+iterator.next().get("roll"));
+        }
+        
+        // create and delete from a collection a collection
+        
+        MongoCollection<org.bson.Document> col = database.getCollection("surajTemp");
+        /*org.bson.Document doc = new org.bson.Document("name","suraj singh bisht")
+                                       .append("class","TE")
+                                       .append("pass","dope");
+        col.insertOne(doc);*/
+        col.deleteOne(Filters.eq("class","TE"));
+        System.out.print("delete Sucess");
+        
+        // update the document
+        
+        collection.updateOne(Filters.eq("roll",1), Updates.set("name", "Suraj Bisht"));
+        System.out.print("update Sucessfull");

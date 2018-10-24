@@ -1,0 +1,63 @@
+create database mock;
+use mock;
+create table itm(
+	qty int
+);
+
+insert into itm values(20),(30),(50),(10);
+
+delimiter /
+drop procedure solve/
+create procedure solve(in cl int)
+begin
+declare t1 int;
+
+declare fin int default 0;
+declare cus cursor for select qty from itm;
+
+declare continue handler for not found set fin=1;
+open cus;
+
+create table tmp(
+	qty int
+);
+
+
+assign: loop
+if(fin=1) then leave assign;
+end if;
+
+fetch cus into t1;
+if(t1<cl) then 
+insert into tmp values(t1);
+end if;
+
+end loop assign;
+select * from tmp;
+drop table tmp;
+end
+/
+
+delimiter ;
+
+
+---------------------------MONGO----------------------
+
+
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',avgAmt:{$avg:'$Amount'}}});
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',minAmt:{$min:'$Amount'}}});
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',maxAmt:{$max:'$Amount'}}});
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',firstAmt:{$first:'$Amount'}}});
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',lastAmt:{$last:'$Amount'}}});
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',arrayAmt:{$push:'$Amount'}}});
+
+db.employee.aggregate({$skip:1},{$group:{_id:'$custID',totAmt:{$sum:'$Amount'}}});
+
+
+db.employee.aggregate({$skip:1},{$group:{_id:'$custID',avgAmt:{$avg:'$Amount'}}});

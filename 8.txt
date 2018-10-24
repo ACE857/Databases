@@ -1,0 +1,52 @@
+
+delimiter /
+drop procedure aCalc/
+create procedure aCalc()
+begin
+
+declare a float;
+declare r int default 3;
+
+assign: loop
+
+if(r>7) then leave assign;
+end if;
+
+set a = 3.14*r*r;
+select concat('Area for ',r,' is ',a);
+set r=r+1;
+end loop assign;
+
+end
+/
+
+delimiter ;
+
+
+
+----------------------------Mongo---------------
+
+use mock;
+db.bank.insertOne({sno:1,cid:'C001',Cname:'Amit',Bank:'SBI',Balance:3000,Location:'Pune'});
+
+db.bank.insertMany([{sno:2,cid:'C002',Cname:'Amol',Bank:'AXIS',Balance:4000,Location:'Pune'},{sno:3,cid:'C003',Cname:'Amit',Bank:'AXIS',Balance:5000,Location:'Mumbai'},{sno:4,cid:'C004',Cname:'Amit',Bank:'AXIS',Balance:5000,Location:'Nagpur'},{sno:5,cid:'C005',Cname:'Amar',Bank:'HDFC',Balance:7000,Location:'Pune'},{sno:7,cid:'C007',Cname:'Vijay',Bank:'HDFC',Balance:8000,Location:'Mumbai'}]);
+
+var mapFunc = function(){
+	emit(this.Bank,this.Balance);
+};
+
+var redFunc = function(mkey,mvalue){
+	return Array.sum(mvalue);	
+};
+
+db.bank.mapReduce(
+	mapFunc,
+	redFunc,
+	{out:'mresult'}
+)
+
+db.result.find({_id:'AXIS'});
+
+ db.result.find({_id:'SBI'});
+
+ db.result.find({_id:'HDFC'});

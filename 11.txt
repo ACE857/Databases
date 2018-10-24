@@ -1,0 +1,64 @@
+create table library(
+	bid int primary key,
+	copy int
+);
+
+create table laudit(
+	bid int,
+	count int
+);
+
+insert into library values(1,20),(2,30),(3,40);
+
+delimiter /
+drop trigger trig/
+create trigger trig before update on library
+for each row
+begin
+insert into laudit values(OLD.bid,OLD.copy);
+end /
+delimiter ;
+
+delimiter /
+drop trigger trig2/
+create trigger trig2 before delete on library
+for each row
+begin
+insert into laudit values(OLD.bid,OLD.copy);
+end /
+delimiter ;
+
+
+
+
+-------------------------MONGO---------------------------
+
+
+use mock;
+db.student.insertOne({roll:1,name:'amit','addr':'loni'});
+
+db.student.insertMany([{roll:2,name:'shashir',addr:{at:'loni',tal:'rahta',dist:'ahmadnagar'}},{roll:11,name:'sachin',marks:60.23,addr:'pune'},{name:'rahul',address:'kolhar'}]);
+
+db.student.find({},{name:1,_id:0});
+
+db.student.find({}).skip(5)
+
+db.student.find({}).limit(5)
+
+db.student.find({roll:{$lt:10,$gt:5}});
+
+db.student.find({$or:[{addr:'loni'},{addr:'pune'}]}).pretty();
+
+db.student.find().sort({roll:1}).pretty();
+
+db.student.remove({roll:{$lt:8,$gt:3}});
+
+db.student.remove({addr:'loni'});
+
+db.student.save({_id:10,name:'ram',roll:60,addr:'pune'});
+
+db.student.update({roll:1},{$set:{addr:{at:'sang',tal:'sng',dist:'admednagar'}}});
+
+db.student.createIndex({roll:1})
+
+db.student.getIndexes()

@@ -1,0 +1,142 @@
+1. Which command is used for clearing the screen in MySQL?
+2. What is difference between Oracle and MySQL?
+3. Which are the major categories of SQL commands? Enlist the same with suitable commands from each category.
+4. Define DBMS. Which are the major vendors of DBMS in today’s generation?
+5. Explain the various steps used to launch MySQL prompt both in Windows OS and Linux OS.
+
+
+
+
+1. SQL stands for?
+2. How many types of SQL commands exist? Enlist the same.
+3. How data retrieval can be achieved in case of RDBMS? Which command is used for the same?
+4. How one can modify the existing table?
+5. Enlist DDL & DCL commands.
+6. Write the syntax for creating a new table from existing table.
+7. Write the syntax of SELECT command.
+8. How do you communicate with an RDBMS?
+9. How to create an index and view on existing table?
+10. Explain various types of indices by giving syntax of each.
+11. Enlist the possible operations on index and views.
+12. Why there is need of creating an index on existing table?
+13. Differentiate between
+a) DELETE vs. DROP vs. TRUNCATE commands
+b) Simple Index vs. Composite Index
+14. Give Syntax of following in MySQL
+a) Rename
+b) Truncate
+c) Modifying Existing Column from table
+15. Is it possible to delete entire column from existing table. If yes, how? Justify with suitable example
+
+
+
+Exercise/Viva Questions:
+1. What are primary keys and foreign keys?
+2. What is the difference between primary key and unique key?
+3. Which are the different ways to apply a constraint to database tables?
+4. Whether Foreign Key constraint allows a column to have NULL values?
+5. Can we apply check constraint using MySQL on database table? If yes, how?
+6. How to add a new constraint or remove an existing constraint from database tables?
+7. Can we apply constraints on views? Explain with example.
+8. How to create synonyms? Give the syntax for the same.
+
+
+
+Exercise 04/ Viva Questions
+1. What is a “join"?
+2. Which are the different types of joins?
+3. What is the difference between “inner" and “outer" joins?
+4. Out of JOIN and SUB-QUERY, which one is more efficient?
+5. What is outer join? Explain with examples.
+6. Give the syntax for:
+a) Intersect
+b) Minus
+with suitable example of each.
+
+
+
+1. What is the difference between GROUP BY and ORDER BY clauses?
+2. What is the difference between a \where" clause and a \having" clause?
+3. When using a count (distinct) is it better to use a self-join or temp table to find redundant data, and provide an example?
+4. How to find out the 10th highest salary in SQL query?
+5. What is the use of DESC in SQL?
+6. Which operator performs pattern matching?
+7. What are the wildcards used for pattern matching?
+8. How to select last N records from a Table?
+9. Identify error in following SQL:
+SELECT EMPNO, SUM(SAL) FROM EMP
+GROUP BY EMPNO
+HAVING ENAME= "KENT";
+a) Syntax Error
+b) SUM() is not an aggregate function
+c) HAVING cannot be used with GROUP BY
+d) The Having condition has to be based on some column that appears in the select list.
+10. Explain the ORDER BY clause with proper syntax.
+
+
+Viva Questions
+1. What is difference between SQL and PL/SQL?
+2. What is PL/SQL Block?
+3. What is difference between procedures and functions?
+4. What are the different iterative controls in PL/SQL?
+5. Give the structure of PL/SQL block.
+
+
+
+Exercise 08/Viva Questions:
+1. What is trigger and cursor in PL/SQL?
+2. What are the types of trigger and cursor?
+3. How to delete a trigger?
+4. Why we write a cerate or replace in PL/SQL Block?
+5. What is row level and statement level trigger?
+
+
+
+
+Exercise 09/Viva Questions:
+1. Compare RDBMS vs. MongoDB
+2. How to update a collection in MongoDB?
+3. List all possible special notations used in MongoDB while finding specific records based
+on conditions.
+4. Execute all queries solved earlier on MySQL using MongoDB.
+5. Can we specify Data Types in MongoDB for columns?
+
+
+
+
+Exercise 10/Viva Questions:
+1. Compare SQL vs. MongoDB indexing.
+2. What changes you observe after performing Indexing?
+3. How to remove specific document from MongoDB collection?
+4. Execute all queries solved earlier on MySQL using MongoDB.
+5. Can we specify more than one aggregate function simultaneously in MongoDB?
+
+
+
+
+
+Exercise 11/Viva Questions:
+1. Explain the use of MapReduce Operation.
+2. Apply the MapReduce operation to find the total salary of each department assuming employee collection already exists.
+3. Can we apply MapReduce operation in relational databases? Justify your answer with suitable example.
+
+
+
+
+Exercise 12/Viva Questions:
+1. Explain the use of JSON.
+2. Explain encoding and decoding functions in JSON.
+3. How to encode/decode JSON objects using PHP? Explain with suitable example?
+4. How to encode/decode JSON objects using JAVA? Explain with suitable example?
+
+
+
+
+Exercise 13:
+1. Implement encoding/decoding of JSON objects using JAVA.
+2. Define encoding and decoding of objects in general.
+3. Whether encoding/decoding supports simple JSON objects or JSON Array objects or both.
+Explain with suitable example.
+
+
+

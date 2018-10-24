@@ -1,0 +1,71 @@
+    package assign;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import jdk.nashorn.internal.parser.JSONParser;
+
+    public class json {
+        public static void main(String[] args) throws FileNotFoundException{
+            
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name", "SURAJ SINGH BISHT");
+            jsonObject.addProperty("class", "TE");
+           System.out.print(jsonObject);
+           
+            JsonObject m = new JsonObject();
+            m.addProperty("street", "Army Institute Of tech");
+            m.addProperty("Road","Alandi Road");
+            m.addProperty("city","Pune");
+            m.addProperty("PIN", "411015");
+            
+            jsonObject.add("address", m);
+            
+            System.out.print(jsonObject.get("address"));
+            
+            PrintWriter printWriter = new PrintWriter("Example.json");
+            printWriter.write(jsonObject.toString());
+            printWriter.flush();
+            printWriter.close();
+            
+            Object o = new JsonParser().parse(new FileReader("Example.json"));
+            JsonObject rd = (JsonObject)o;
+            System.out.print("\n\n\nRead JSON IS \n"+rd+"\n"+rd.get("address"));
+        }
+        
+                
+    }
+
+
+
+------------------------------MONGO---------------------------
+
+
+use mock;
+db.bank.insertOne({sno:1,cid:'C001',Cname:'Amit',Bank:'SBI',Balance:3000,Location:'Pune'});
+
+db.bank.insertMany([{sno:2,cid:'C002',Cname:'Amol',Bank:'AXIS',Balance:4000,Location:'Pune'},{sno:3,cid:'C003',Cname:'Amit',Bank:'AXIS',Balance:5000,Location:'Mumbai'},{sno:4,cid:'C004',Cname:'Amit',Bank:'AXIS',Balance:5000,Location:'Nagpur'},{sno:5,cid:'C005',Cname:'Amar',Bank:'HDFC',Balance:7000,Location:'Pune'},{sno:7,cid:'C007',Cname:'Vijay',Bank:'HDFC',Balance:8000,Location:'Mumbai'}]);
+
+
+var mapFunc = function(){
+emit(this.Bank,this.Balance) };
+
+var redFunc = function(keyBank,valueBal){
+ return Array.sum(valueBal);
+ };
+
+db.bank.mapReduce(
+ mapFunc,
+ redFunc,
+ {out:"result"}
+ )
+
+ db.result.find({_id:'AXIS'});
+
+ db.result.find({_id:'SBI'});
+
+ db.result.find({_id:'HDFC'});

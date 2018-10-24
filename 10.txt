@@ -1,0 +1,74 @@
+recate database mock;
+use mock;
+
+create table marks(
+	mk int,
+	grade varchar(25)
+);
+
+insert into marks values(1200,NULL),(1300,NULL),(1100,NULL),(1000,NULL),(900,NULL),(982,NULL),(893,NULL),(745,NULL),(912,NULL),(812,NULL),(1111,NULL),(523,NULL);
+
+
+delimiter /
+drop procedure solve/
+create procedure solve()
+begin
+
+declare t1 int;
+declare fin int default 0;
+declare cus cursor for select mk from marks;
+declare continue handler for not found set fin=1;
+
+open cus;
+assign: loop
+if(fin=1) then leave assign;	end if;
+fetch cus into t1;
+if(t1>990 and t1<=1500) then 
+update marks set grade='Distinction' where mk=t1;
+elseif(t1>900 and t1<=989) then 
+update marks set grade='First Class' where mk=t1;
+elseif(t1>825 and t1<=899) then 
+update marks set grade='Second Class' where mk=t1;
+else 
+update marks set grade='Failed' where mk=t1;
+
+end if;
+
+
+end loop assign;
+select * from marks;
+end /
+
+delimiter ;
+
+
+
+
+-------------------------MONGO-----------------------------
+
+db.inventory.insert({_id:1,'item':'f1',type:'food',quantity:500})
+use mock;
+
+db.inventory.insertMany([{_id:2,'item':'f2',type:'food',quantity:100},{_id:3,'item':'p1',type:'paper',quantity:200},{_id:4,'item':'p2',type:'paper',quantity:150},{_id:5,'item':'f3',type:'snacks',quantity:300},{_id:6,'item':'t1',type:'toys',quantity:500},{_id:7,'item':'a1',type:'apparel',quantity:250},{_id:8,'item':'a2',type:'apprael',quantity:400},{_id:9,'item':'t2',type:'toys',quantity:50},{_id:10,'item':'f4',type:'snacks',quantity:75}]);
+
+db.inventory.find({type:'snacks'});
+
+db.inventory.updateOne({_id:1},{$set:{item:'suraj'}});
+
+db.inventory.remove({type:'toys',qty:50});
+
+db.inventory.find({type:'food',quantity:{$lt:400}});
+
+db.inventory.find({$or:[{quantity:{$lt:400}},{type:'snacks'}]})
+
+db.inventory.find({quantity:{$lt:400},$or:[{type:'food'},{type:'snacks'}]});
+
+db.inventory.find({type:'food'},{item:1,quantity:1});
+
+db.inventory.find().sort({quantity:-1});
+
+db.inventory.createIndex({type:1});
+
+db.inventory.dropIndex({type:1});
+
+db.inventory.getIndexes()

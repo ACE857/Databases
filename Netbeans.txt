@@ -1,0 +1,42 @@
+try{
+        Class.forName("java.sql.DriverManager");
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost/mock","root","root");
+            String str="";
+            str = "update employee set name='new name' where id=2;";
+             Statement stmt=con.createStatement();
+             stmt.execute(str);
+             str = "delete from employee where id=10;";
+             stmt.execute(str);
+            
+             str = "insert into employee values(12,'Suraj Bisht','Pune',70000,2000);";
+             stmt.execute(str);
+             
+             str = "select * from employee";
+            
+           
+            ResultSet rs=stmt.executeQuery(str);
+            while(rs.next()) 
+            {
+                System.out.println(rs.getString("id"));
+                System.out.println(rs.getString("name"));
+                System.out.println(rs.getString("address"));
+                System.out.println(rs.getString("salary"));
+                System.out.println(rs.getString("com"));
+                        
+            } 
+        }   catch(Exception e) 
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+
+
+        ResultSet rs=stmt.executeQuery(str);
+            DefaultTableModel dt=(DefaultTableModel)jTable1.getModel();
+            while(rs.next()) {
+                Object obj[]=
+                {
+                    rs.getString("Name"),rs.getString("Password"),rs.getString("history"),
+                };
+                dt.addRow(obj);
+            }

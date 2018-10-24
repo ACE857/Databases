@@ -1,0 +1,118 @@
+/*
+
+When an error occurs inside a stored procedure, it is important to handle it appropriately, such as continuing or exiting the current code block’s execution, and issuing a meaningful error message.
+
+MySQL provides an easy way to define handlers that handle from general conditions such as warnings or exceptions to specific conditions e.g., specific error codes.
+The action accepts one of the following values:
+
+    CONTINUE :  the execution of the enclosing code block ( BEGIN … END ) continues.
+    EXIT : the execution of the enclosing code block, where the handler is declared, terminates.
+
+        A MySQL error code.
+    A standard SQLSTATE value. Or it can be an SQLWARNING , NOTFOUND or SQLEXCEPTION condition, which is shorthand for the class of SQLSTATE values. The NOTFOUND condition is used for a cursor or  SELECT INTO variable_list statement.
+    A named condition associated with either a MySQL error code or SQLSTATE value.
+
+    DECLARE EXIT HANDLER FOR 1051 SELECT 'Please create table abc first';
+SELECT * FROM abc;
+
+
+
+DECLARE CONTINUE HANDLER FOR 1062
+SELECT 'Error, duplicate key occurred';
+*/
+
+drop database mock;
+create database mock;
+use mock;
+
+create table borrower(
+	roll int primary key,
+	name varchar(25),
+	doi date,
+	namebook varchar(25),
+	status varchar(10)
+);
+
+create table fine(
+	roll int,
+	dat date,
+	amt int
+);
+
+insert into borrower values(1,'suraj','2018-10-02','asd','I'),(3,'sduraj','2018-10-12','assdd','I'),(4,'surajbisht','2018-10-08','asdsd','I'),(5,'susdraj','2018-09-02','asdgh','I'),(6,'surnvaj','2018-10-20','astyud','I');
+
+drop procedure solve;
+delimiter /
+create procedure solve(in rol int,in nb varchar(10))
+begin
+
+declare t date;
+declare nos int;
+
+DECLARE EXIT HANDLER FOR 1146 SELECT 'Please create table appropiate first';
+
+DECLARE EXIT HANDLER FOR 1054 SELECT 'Unknown column';
+
+
+select doi into t from borrower where roll=rol and namebook=nb;
+
+set nos=datediff(now(),t);
+select nos;
+update borrower set status='R' where roll=rol and namebook=nb;
+if(nos>15 and nos<30) then 
+insert into fine values(rol,now(),nos*5);
+elseif(nos>30) then
+
+insert into fine values(rol,now(),nos*50);
+
+end if;
+
+end/
+delimiter ;
+
+
+
+-------------------JSON------------------------
+
+    package assign;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import jdk.nashorn.internal.parser.JSONParser;
+
+    public class json {
+        public static void main(String[] args) throws FileNotFoundException{
+            
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name", "SURAJ SINGH BISHT");
+            jsonObject.addProperty("class", "TE");
+            System.out.print(jsonObject);
+            
+            JsonObject m = new JsonObject();
+            m.addProperty("street", "Army Institute Of tech");
+            m.addProperty("Road","Alandi Road");
+            m.addProperty("city","Pune");
+            m.addProperty("PIN", "411015");
+            
+            jsonObject.add("address", m);
+            
+            System.out.print(jsonObject.get("address"));
+            
+            PrintWriter printWriter = new PrintWriter("Example.json");
+            printWriter.write(jsonObject.toString());   
+            printWriter.flush();
+            printWriter.close();
+            
+            Object o = new JsonParser().parse(new FileReader("Example.json"));
+            JsonObject rd = (JsonObject)o;
+            System.out.print("\n\n\nRead JSON IS \n"+rd+"\n"+rd.get("address"));
+        }
+        
+                
+    }
+

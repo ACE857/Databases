@@ -1,0 +1,97 @@
+create database mock;
+use mock;
+
+create table active(
+	acc int,
+	odate date,
+	ldate date,
+	status varchar(2)
+);
+
+create table inactive(
+	acc int,
+	odate date,
+	ldate date,
+	status varchar(2)
+);
+
+insert into active values(1,'2012-02-28','2017-10-25','A');
+
+insert into active values(2,'2013-02-28','2018-10-25','A'),(3,'2017-02-28','2017-09-25','A'),(4,'2012-02-28','2016-10-25','A'),(5,'2012-02-28','2018-05-25','A'),(6,'2012-02-28','2017-05-25','A'),(7,'2012-02-28','2010-10-25','A');
+
+
+
+delimiter /
+drop procedure solve/
+create procedure solve()
+begin
+
+declare id int;
+declare ld date;
+
+declare fin int default 0;
+
+declare cus cursor for select acc,ldate from active;
+declare continue handler for not found set fin=1;
+open cus;
+
+assign: loop
+if(fin=1) then leave assign; 
+end if;
+fetch cus into id,ld;
+if(datediff(now(),ld)>365) then 
+update active set status='I' where acc=id;
+insert into inactive(acc,ldate) values(id,ld);
+end if;
+
+
+end loop assign;
+
+
+end/
+delimiter ;
+
+
+
+
+-----------------------PART 2----------------------------
+
+
+
+create table employee(
+	id int primary key,
+	name varchar(25),
+	address varchar(25),
+	salary int,
+	com int
+);
+
+create table proj(
+	pno int primary key,
+	addr varchar(25)
+);
+
+insert into employee values(1,'Amit','Pune',35000,5000);
+
+insert into employee values(2,'Sneha','Pune',25000,NULL),(3,'Savita','Nashik',28000,2000),(4,'Pooja','Mumbai',19000,NULL),(5,'Sagar','Mumbai',25000,3000),(6,'Rohit','Jaipur',40000,NULL),(7,'Poonam','Patna',45000,2000),(8,'Arjun','Delhi',20000,900),(9,'Rahul','Nagpur',60000,5000),(10,'Dulquer','Kochi',30000,1000);
+
+
+insert into proj values(10,'Mumbai'),(20,'Pune'),(30,'Jalgaon'),(40,'Nagpur'),(50,'Delhi'),(60,'Kochi'),(70,'Pune'),(80,'Nashik');
+
+select max(salary),min(salary),avg(salary),sum(salary) from employee;
+
+select * from employee order by salary;
+
+select name from employee where com is NULL;
+
+update employee set address='Nashik' where name='Amit';
+
+select count(*),address from employee group by address;
+
+select e.address from employee e,proj p where e.address=p.addr;
+
+ select address,max(salary) from employee group by address having max(salary)>26000;
+
+ select * from employee group by address having address='Pune' order by name;
+
+delete from employee where salary>30000;

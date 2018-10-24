@@ -1,0 +1,80 @@
+create database mock;
+use mock;
+
+create table emp(
+	empid int primary key,
+	name varchar(30) not null,
+	salary int,
+	depid int
+);
+
+create table dep(
+	depid int primary key,
+	dname varchar(30) not null
+);
+
+insert into emp values(1,'Ethan Hunt',5000,4),(2,'Tony Montana',6500,1),(3,'Sarah Connor',8000,5),(4,'Rick Deckard',7200,3),(5,'Martin Blank',5600,NULL);
+
+insert into dep values(1,'Adminstration'),(2,'Customer Service'),(3,'Finance'),(4,'Human Resource'),(5,'Sales');
+
+select e.empid,e.name,d.dname from emp e left join dep d on e.depid=d.depid;
+
+create view ljoin as select e.empid,e.name,d.dname from emp e left join dep d on e.depid=d.depid;
+
+create or replace view ljoin as select e.empid,e.name,d.dname,e.salary from emp e left join dep d on e.depid=d.depid;
+
+create or replace view aview as select empid,salary,depid from emp;
+
+insert into aview values(6,2000,6);
+-- now this statment will not work because the name doesnt take null as a default value hence to make this work we have to change schema a little bit to make name take a NULL default value
+
+alter table emp change name name varchar(25) ;
+
+insert into aview values(7,2500,7),(8,3000,8);
+
+update aview set salary=6000 where empid=1;
+
+select * from aview where depid is NULL;
+
+delete from aview where salary=8000;
+
+drop view aview;
+
+
+create table library(
+	bid int primary key,
+	copy int
+);
+
+create table laudit(
+	bid int,
+	count int
+);
+
+insert into library values(1,20),(2,30),(3,40);
+
+delimiter /
+drop trigger trig/
+create trigger trig before update on library
+for each row
+begin
+insert into laudit values(OLD.bid,OLD.copy);
+end;
+/
+delimiter ;
+
+delimiter /
+drop trigger trig/
+create trigger trig before delete on library
+for each row
+begin
+insert into laudit values(OLD.bid,OLD.copy);
+end;
+/
+delimiter ;
+
+
+
+
+
+

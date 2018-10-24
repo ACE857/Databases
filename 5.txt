@@ -1,0 +1,119 @@
+create database mock;
+use mock;
+
+create table a( roll int );
+
+create table b(rollb int);
+
+create table c(rol int,temp int);
+
+insert into a values(1),(2),(3),(4),(5);
+
+insert into b values(4),(5),(6),(7),(8);
+
+
+
+delimiter /
+drop procedure solve /
+create procedure solve()
+begin
+
+declare t1 int;
+declare fin int default 0;
+
+declare cus cursor for select roll from a;
+declare continue handler for not found set fin=1;
+
+open cus;
+
+assign: loop
+if(fin=1) then leave assign;
+end if;
+fetch cus into t1;
+if(t1 not in (select rollb from b)) then 
+insert into b values(t1);
+end if;
+
+end loop assign;
+
+end
+/
+delimiter ;
+
+
+----------------------------------------------------------------------------------------------------
+										Nested Explicit cursors
+delimiter /
+drop procedure solve/
+create procedure solve()
+begin
+
+declare rol1 int;
+declare rol2 int;
+declare f1 int default 0;
+declare f2 int default 0;
+declare flg int;
+
+
+declare c1 cursor for select roll from a;
+declare continue handler for not found set f1=1;
+open c1;
+
+
+block1 : loop
+if(f1=1) then leave block1; end if;
+fetch c1 into rol1;
+set flg=0;
+
+block2 : begin
+declare c2 cursor for select rollb from b;
+declare continue handler for not found set f2=1;
+open c2;
+block3 : loop
+if(f2=1 or f1=1) then leave block3; end if;
+fetch c2 into rol2;
+
+insert into c values(rol1,rol2);
+if(rol1=rol2) then set flg=1; leave block3; end if;
+end loop block3;
+end block2;
+set f2=0;
+if(f1=1) then leave block1; end if;
+if(flg=0) then insert into b values(rol1); end if;
+
+end loop block1;
+
+end
+/
+delimiter ;
+
+
+--------------------------------MONGO--------------------------
+
+
+use mock;
+
+db.employee.insertOne({custID:'A123',Amount:500,Status:'A'});
+db.employee.insertMany([{custID:'A123',Amount:250,Status:'A'},{custID:'B212',Amount:200,Status:'A'},{custID:'A123',Amount:300,Status:'D'}]);
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',maxAmt:{$max:'$Amount'}}});
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',minAmt:{$min:'$Amount'}}});
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',avgAmt:{$avg:'$Amount'}}});
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',sumAmt:{$sum:'$Amount'}}});
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',firstAmt:{$first:'$Amount'}}});
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',lastAmt:{$last:'$Amount'}}});
+
+db.employee.aggregate({$match:{Status:'A'}},{$group:{_id:'$custID',ArrayAmt:{$push:'$Amount'}}});
+
+db.employee.aggregate({$sort:{custID:1}},{$group:{_id:'$custID',lastAmt:{$sum:'$Amount'}}});
+// due to pipelining the result outputs in descending
+
+
+db.employee.aggregate({$sort:{custID:-1}},{$group:{_id:'$custID',lastAmt:{$sum:'$Amount'}}});
+
+

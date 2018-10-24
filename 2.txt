@@ -1,0 +1,63 @@
+drop database mock;
+
+create database mock;
+
+use mock;
+
+create table pgrades(
+	gid int,
+	gname varchar(25),
+	minprice int,
+	maxprice int
+);
+
+create table sector(
+	sid int,
+	sname varchar(25)
+);
+
+create table package(
+	pid int,
+	speed int,
+	srtdate date,
+	monpay int,
+	sid int
+);
+
+create table customer(
+	cid int,
+	name varchar(25),
+	strdate date,
+	city varchar(25),
+	phone varchar(12),
+	discount int,
+	pid int
+);
+
+insert into pgrades values(1,'asd',10,20),(2,'asasdwd',110,220),(4,'asasdd',80,60),(5,'ased',90,50),(6,'asds',20,30);
+
+insert into sector values(10,'wer'),(20,'wsder'),(30,'wevr'),(40,'wewer'),(50,'wekr'),(60,'wfder');
+
+insert into package values(25,26,'1998-02-28',10000,30),(26,27,'1997-02-28',12000,40),(27,28,'1996-02-28',20000,50),(35,36,'1988-02-28',80000,50),(45,46,'1948-02-28',105000,10);
+
+insert into customer values(11,'dsf','2012-02-23','ert','45564646',20,25),(12,'dfsf','2013-02-23','esdrt','45sd564646',30,26),(13,'dsdf','2018-02-23','ebrt','45b564646',60,35),(14,'dtsf','2019-02-23','ecrt','4556c646',50,27),(16,'dsnf','2015-02-23','eurt','4555646646',29,36);
+
+
+select c.name,p.pid,p.speed from customer c inner join package p on c.pid=p.pid;
+
+select c.name,p.pid,p.speed from customer c inner join package p on c.pid=p.pid where p.pid=25 or p.pid=27;
+
+select p.pid,p.speed,p.monpay,s.sname from package p inner join sector s on s.sid=p.sid;
+
+select c.name,p.pid,p.speed,p.monpay,s.sname from customer c inner join package p on p.pid=c.pid inner join sector s on s.sid=p.sid;
+
+
+select c.name,p.pid,p.speed,p.monpay,s.sname from package p inner join customer c on c.pid=p.pid inner join sector s on s.sid = p.sid where s.sname='wevr';
+
+select * from customer c right join package p on c.pid=p.pid;
+
+select * from package p right join customer c on c.pid=p.pid;
+
+select * from package p cross join customer c where p.pid=c.pid;
+
+select p.pid,p.speed,.p.monpay,pg.gid from pgrades pg 

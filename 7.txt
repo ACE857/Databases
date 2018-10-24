@@ -1,0 +1,63 @@
+drop database mock;
+create database mock;
+use mock;
+
+
+create table account(
+	acc int,
+	amount int default 100
+);
+
+insert into account values(1,100),(2,50),(3,400),(4,70);
+
+
+
+delimiter /
+drop procedure solve/
+create procedure solve(in ac int)
+begin
+
+declare amt int;
+select amount into amt from account where acc=ac;
+
+if amt-100>0 then 
+update account set amount=amount-100 where acc=ac;
+select 'amount deduced';
+elseif amt-100<0 then select 'amount insufficent';
+
+end if;
+
+end;
+/
+delimiter ;
+
+
+--------------------MONGO----------------------
+
+use mock;
+
+db.employee.insertOne({custID:'A123',Amount:500,Status:'A'});
+db.employee.insertMany([{custID:'A123',Amount:250,Status:'A'},{custID:'B212',Amount:200,Status:'A'},{custID:'A123',Amount:300,Status:'D'}]);
+
+db.employee.aggregate({$skip:1},{$group:{_id:'$custID',amt:{$push:'$Amount'}}}).pretty();
+
+
+db.employee.aggregate({$skip:1},{$group:{_id:'$custID',amt:{$first:'$Amount'}}}).pretty();
+
+db.employee.aggregate({$skip:1},{$group:{_id:'$custID',amt:{$last:'$Amount'}}});
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',total:{$sum:'$Amount'}}});
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',avg:{$avg:'$Amount'}}})
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',min:{$min:'$Amount'}}})
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',min:{$max:'$Amount'}}})
+
+db.employee.aggregate({$limit:3},{$group:{_id:'$custID',first:{$first:'$Amount'}}});
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',last:{$last:'$Amount'}}})
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',array:{$push:'$Amount'}}});
+
+db.employee.aggregate({$limit:2},{$group:{_id:'$custID',array:{$push:'$Amount'}}});
